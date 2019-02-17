@@ -30,3 +30,5 @@ custom:
     basePath: ''
     stage: ${self:custom.secrets.NODE_ENV}
     createRoute53Record: true
+
+

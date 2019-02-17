@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 
 export default class extends Component {
-  static getInitialProps ({ query: { id } }) {
-    return { postId: id }
+  static async getInitialProps (context) {
+    console.log(context.query);
+    return { postId: context.query.id }
   }
 
   render () {
