@@ -27,7 +27,7 @@ app.get('*', (req, res) => {
     const params = match.route(pathname);
 
     if (params) {
-      // We could do this but then we loose parody between SSR & client with ctx.query in getInitialProps
+      // We could do this but then we lose parody between SSR & client with ctx.query in getInitialProps
       // req.params = params;
 
       try {
