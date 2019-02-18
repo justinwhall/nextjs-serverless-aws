@@ -6,7 +6,8 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "deploy": "next build && sls deploy"
+    "deploy": "next build && sls deploy",
+    "offline": "next build && sls offline"
   },
   "dependencies": {
     "aws-serverless-express": "^3.3.5",
@@ -19,6 +20,7 @@
     "serverless-apigw-binary": "^0.4.4",
     "serverless-domain-manager": "^2.6.0",
     "serverless-http": "^1.6.0",
+    "serverless-offline": "^4.4.2",
     "url": "^0.11.0"
   }
 }

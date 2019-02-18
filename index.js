@@ -17,7 +17,6 @@ app.use('/_next', express.static(path.join(__dirname, '.next')))
 // matching index is easy
 app.get('/', require('./.next/serverless/pages/index.js').render)
 
-// check for other URL matches
 app.get('*', (req, res) => {
 
   const parsedUrl = parse(req.url, true);
@@ -28,11 +27,13 @@ app.get('*', (req, res) => {
     const params = match.route(pathname);
 
     if (params) {
+      // We could do this but then we loose parody between SSR & client with ctx.query in getInitialProps
+      // req.params = params;
 
       try {
-        require(`./.next/serverless/pages${match.page}`).render(req, res)
+        require(`./.next/serverless/pages${match.page}`).render(req, res, match.path, params)
       } catch (err) {
-        require('./.next/serverless/pages/_error.js').render(req, res)
+        require('./.next/serverless/pages/_error.js').render(req, res, match.path, params)
       }
       hasMatch = true;
       break;
@@ -52,4 +53,4 @@ app.get('*', (req, res) => {
 app.get("*", require('./.next/serverless/pages/_error.js').render);
 
 const server = awsServerlessExpress.createServer(app, null, binaryMimeTypes)
-module.exports.server = (event, context) => { awsServerlessExpress.proxy(server, event, context) }
+module.exports.server = async (event, context) => { awsServerlessExpress.proxy(server, event, context) }
