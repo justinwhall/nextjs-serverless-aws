@@ -11,12 +11,21 @@ const matches = [
   { route: route("/posts/:id"), page: "/posts" },
 ];
 
-// static files
+/**
+ * Serve Next assets.
+ */
 app.use('/_next', express.static(path.join(__dirname, '.next')))
 
-// matching index is easy
+
+/**
+ * Match index route
+ */
 app.get('/', require('./.next/serverless/pages/index.js').render)
 
+
+/**
+ * Match other routes
+ */
 app.get('*', (req, res) => {
 
   const parsedUrl = parse(req.url, true);
@@ -27,8 +36,15 @@ app.get('*', (req, res) => {
     const params = match.route(pathname);
 
     if (params) {
-      // We could do this but then we lose parody between SSR & client with ctx.query in getInitialProps
-      // req.params = params;
+
+      /**
+       * render() accepts 2 params. req and res.
+       *
+       * We could do this but then we lose parody between SSR & client with ctx.query in getInitialProps
+       * req.params = params;
+       *
+       * tldr: the following works, but does NOT send match.path or params.
+       */
 
       try {
         require(`./.next/serverless/pages${match.page}`).render(req, res, match.path, params)
@@ -53,4 +69,4 @@ app.get('*', (req, res) => {
 app.get("*", require('./.next/serverless/pages/_error.js').render);
 
 const server = awsServerlessExpress.createServer(app, null, binaryMimeTypes)
-module.exports.server = async (event, context) => { awsServerlessExpress.proxy(server, event, context) }
+module.exports.server = (event, context) => { awsServerlessExpress.proxy(server, event, context) }

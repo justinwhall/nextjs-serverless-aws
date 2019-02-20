@@ -1,6 +1,6 @@
 const express = require('express')
 const next = require('next')
-// const path = require('path')
+const path = require('path')
 const port = parseInt(process.env.PORT, 10) || 3000
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
@@ -9,7 +9,7 @@ const handle = app.getRequestHandler()
 const server = express()
 
 app.prepare().then(() => {
-  // server.use('/_next', express.static(path.join(__dirname, '.next')))
+  server.use('/_next', express.static(path.join(__dirname, '.next')))
 
   server.get('/a', (req, res) => {
     return app.render(req, res, '/b', req.query)
